@@ -1,29 +1,33 @@
 <template>
-  <div>
+  <div class="wrapper">
     <h1>Life Game</h1>
 
-    <!-- セルのグリッドを表示 -->
-    <div class="grid">
-      <div
-        v-for="(row, y) in grid"
-        :key="y"
-        class="row"
-      >
+    <div class="container">
+      <!-- セルのグリッドを表示 -->
+      <div class="grid">
         <div
-          v-for="(cell, x) in row"
-          :key="x"
-          class="cell"
-          :class="{ alive: cell }"
-          @click="toggleCell(x, y)"
-        ></div>
+          v-for="(row, y) in grid"
+          :key="y"
+          class="row"
+        >
+          <div
+            v-for="(cell, x) in row"
+            :key="x"
+            class="cell"
+            :class="{ alive: cell }"
+            @click="toggleCell(x, y)"
+          ></div>
+        </div>
       </div>
     </div>
 
     <!-- 操作ボタン -->
-    <button @click="step" :disabled="isRunning">1step進める</button>
-    <button @click="isRunning = !isRunning">{{ isRunning ? '停止' : '再生' }}</button>
-    <button @click="randomize" :disabled="isRunning">ランダムに配置</button>
-    <button @click="clearGrid" :disabled="isRunning">初期化</button>
+    <div class="buttons">
+      <button @click="step" :disabled="isRunning">1step進める</button>
+      <button @click="isRunning = !isRunning">{{ isRunning ? '停止' : '再生' }}</button>
+      <button @click="randomize" :disabled="isRunning">ランダムに配置</button>
+      <button @click="clearGrid" :disabled="isRunning">初期化</button>
+    </div>
   </div>
 </template>
 
@@ -140,20 +144,33 @@ function randomize() {
 </script>
 
 <style scoped>
-/* グリッド全体（行を縦に並べる） */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 40px;
+  text-align: center;
+}
+
+/* 👇 このcontainerでグリッドとボタンを縦にまとめて中央揃え */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
 .grid {
   display: grid;
   grid-template-rows: repeat(20, 20px);
   gap: 1px;
 }
 
-/* 各行（セルを横に並べる） */
 .row {
   display: grid;
   grid-template-columns: repeat(20, 20px);
 }
 
-/* 各セルのスタイル */
 .cell {
   width: 20px;
   height: 20px;
@@ -162,8 +179,20 @@ function randomize() {
   cursor: pointer;
 }
 
-/* 生きているセルのスタイル */
 .cell.alive {
   background: black;
 }
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.buttons button {
+  white-space: nowrap;
+}
+
 </style>
