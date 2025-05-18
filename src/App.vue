@@ -23,6 +23,7 @@
     <button @click="step">1step進める</button>
     <button @click="isRunning = !isRunning">{{ isRunning ? '停止' : '再生' }}</button>
     <button @click="randomize">ランダムに配置</button>
+    <button @click="clearGrid">初期化</button>
   </div>
 </template>
 
@@ -54,6 +55,15 @@ const randomAliveProbability = 0.3
 const grid = ref(
   Array.from({ length: rows }, () => Array(cols).fill(false))
 )
+
+// ---------------------------
+// グリッドの初期化
+// ---------------------------
+function clearGrid() {
+  grid.value = Array.from({ length: rows }, () =>
+    Array(cols).fill(false)
+  );
+}
 
 // ---------------------------
 // セルの生死をトグルする関数（クリック時）
