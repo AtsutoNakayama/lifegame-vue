@@ -47,6 +47,9 @@ const intervalTime = 500
 // インターバルID
 let intervalId = null;
 
+// ランダムなグリッド生成時の生存確率（30%）
+const randomAliveProbability = 0.3
+
 // 二次元配列でグリッドを初期化（全て死）
 const grid = ref(
   Array.from({ length: rows }, () => Array(cols).fill(false))
@@ -120,7 +123,7 @@ function getNeighbors(x, y) {
 // ---------------------------
 function randomize() {
   grid.value = Array.from({ length: rows }, () =>
-    Array.from({ length: cols }, () => Math.random() < 0.3) // 30% の確率で alive
+    Array.from({ length: cols }, () => Math.random() < randomAliveProbability)
   )
 }
 </script>
