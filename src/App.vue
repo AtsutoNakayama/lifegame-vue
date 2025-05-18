@@ -20,10 +20,10 @@
     </div>
 
     <!-- 操作ボタン -->
-    <button @click="step">1step進める</button>
+    <button @click="step" :disabled="isRunning">1step進める</button>
     <button @click="isRunning = !isRunning">{{ isRunning ? '停止' : '再生' }}</button>
-    <button @click="randomize">ランダムに配置</button>
-    <button @click="clearGrid">初期化</button>
+    <button @click="randomize" :disabled="isRunning">ランダムに配置</button>
+    <button @click="clearGrid" :disabled="isRunning">初期化</button>
   </div>
 </template>
 
@@ -71,6 +71,7 @@ function clearGrid() {
 // y: 縦（行番号）
 // ---------------------------
 function toggleCell(x, y) {
+  if (isRunning.value) return ;
   grid.value[y][x] = !grid.value[y][x]
 }
 
