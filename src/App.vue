@@ -20,14 +20,15 @@
     </div>
 
     <!-- 操作ボタン -->
-    <button @click="step">Step</button>
-    <button @click="randomize">Randomize</button>
+    <button @click="step">1step進める</button>
+    <button @click="isRunning = !isRunning">{{ isRunning ? '停止' : '再生' }}</button>
+    <button @click="randomize">ランダムに配置</button>
   </div>
 </template>
 
 <script setup>
 // Vue の Composition API を使って記述
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 // ---------------------------
 // ゲームの初期設定
@@ -37,6 +38,15 @@ import { ref } from 'vue'
 const rows = 20
 const cols = 20
 
+// スタートフラグ
+const isRunning = ref(false);
+
+// インターバル時間（500ミリ秒）
+const intervalTime = 500
+
+// インターバルID
+let intervalId = null;
+
 // 二次元配列でグリッドを初期化（全て死）
 const grid = ref(
   Array.from({ length: rows }, () => Array(cols).fill(false))
@@ -44,6 +54,8 @@ const grid = ref(
 
 // ---------------------------
 // セルの生死をトグルする関数（クリック時）
+// x: 横（列番号）
+// y: 縦（行番号）
 // ---------------------------
 function toggleCell(x, y) {
   grid.value[y][x] = !grid.value[y][x]
@@ -72,6 +84,20 @@ function step() {
   // グリッドを更新
   grid.value = newGrid
 }
+
+// ---------------------------
+// 再生/停止
+// ---------------------------
+watch(isRunning, (newVal) => {
+  if (newVal) {
+    // true になったとき：一定時間ごとに step 実行
+    intervalId = setInterval(step, intervalTime);
+  } else {
+    // false になったとき：停止
+    clearInterval(intervalId);
+    intervalId = null;
+  }
+});
 
 // ---------------------------
 // 指定位置の隣接8セルの状態を返す
