@@ -29,6 +29,13 @@
       <button @click="clearGrid" :disabled="isRunning">初期化</button>
     </div>
   </div>
+  <div class="message">
+    <h2>開発者にメッセージを送信</h2>
+    <textarea v-model="message" rows="4" cols="40" placeholder="ここにメッセージを入力してください" />
+    <div style="margin-top: 10px;">
+      <button @click="sendMessage">送信</button>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -141,10 +148,39 @@ function randomize() {
     Array.from({ length: cols }, () => Math.random() < randomAliveProbability)
   )
 }
+
+const message = ref('')
+
+const sendMessage = async () => {
+  if (!message.value.trim()) {
+    alert('メッセージを入力してください')
+    return
+  }
+
+  try {
+    const res = await fetch('https://webhook-a4359831bc3e.herokuapp.com/discord/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: message.value }),
+    })
+
+    if (!res.ok) throw new Error('送信に失敗しました')
+
+    const data = await res.json()
+    if (data.success) {
+      alert('送信しました')
+      message.value = ''
+    } else {
+      alert('送信に失敗しました')
+    }
+  } catch (err) {
+    alert(`エラー: ${err.message}`)
+  }
+}
 </script>
 
 <style scoped>
-.wrapper {
+.wrapper, .message {
   display: flex;
   flex-direction: column;
   align-items: center;
