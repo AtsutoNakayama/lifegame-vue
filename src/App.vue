@@ -158,7 +158,7 @@ const sendMessage = async () => {
   }
 
   try {
-    const res = await fetch('https://webhook-a4359831bc3e.herokuapp.com/discord/send', {
+    const res = await fetch('https://webhook-sp8z.onrender.com/discord/send', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: message.value }),
